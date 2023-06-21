@@ -28,7 +28,8 @@ import dtcwt.sampling
 
 from DTCWTLanczos import scale_waveletlanczos
 from Bicubic import bicubic_interpolation
-
+import time
+from ESRGAN import output_frame
 
 
 # First the window layout in 2 columns
@@ -95,7 +96,7 @@ file_list_column = [
     ],
     [sg.Text("Choose Super-resolution mode"),
      sg.Slider(
-         (0, 2),
+         (0, 10),
          0,
          1,
          orientation="h",
@@ -198,19 +199,34 @@ while True:
             pass
     if (video != []) and (event == "Produce Super-resolved Frame"):
         # values["-FRAME SLIDER-"] != previous_frame_val) or (values["-MODE SLIDER-"] != previous_mode)
+
         video.set(cv2.CAP_PROP_POS_FRAMES, int(values["-FRAME SLIDER-"]))
         ret0, frame0 = video.read()
+        #frame_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\frame_path\frame0.jpg'
+        #cv2.imwrite(frame_path, frame0)
 
         imgbytes0 = cv2.imencode(".png", cv2.resize(frame0, (640, 360), interpolation = cv2.INTER_AREA))[1].tobytes()
         window["-IMAGE-"].update(data=imgbytes0)
 
+        st = time.time()
+
+        scale = int(values["-RATIO SLIDER-"])
+        sg.popup("Processing, Please Wait (Press OK to proceed)")
         if values["-MODE SLIDER-"] == 0:
-            frame = frame0
+            #bicubic
+            frame = cv2.resize(frame0, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
+            #frame = bicubic_interpolation(frame0, scale=int(values["-RATIO SLIDER-"]))
         elif values["-MODE SLIDER-"] == 1:
-            sg.popup("Processing, Please Wait (Press OK to proceed)")
-            frame = scale_waveletlanczos(frame0, ratio=int(values["-RATIO SLIDER-"]))
+            frame = dtcwt.sampling.rescale(frame0, (frame0.shape[0] * scale, frame0.shape[1] * scale), "lanczos")
         elif values["-MODE SLIDER-"] == 2:
-            frame = bicubic_interpolation(frame0, scale=int(values["-RATIO SLIDER-"]))
+            frame = scale_waveletlanczos(frame0, ratio=scale)
+        elif values["-MODE SLIDER-"] == 3:
+            frame = output_frame(frame0)
+            #output_path = output_frame()
+            #frame = cv2.imread(output_path)
+
+        et = time.time()
+        print(et-st)
 
         print(np.shape(frame))
 
@@ -220,6 +236,7 @@ while True:
         #cv2.imshow("", frame)
         cv2.imwrite(filenamesave, frame)
 
+
         sg.popup("Super-resolution Completed. Processed frame saved as image under " + str(directorysave) + ".")
 
     elif (video != []) and (event == "Produce Super-resolved Video"):
@@ -227,6 +244,7 @@ while True:
         ret0, frame0 = video.read()
         # values["-FRAME SLIDER-"] != previous_frame_val) or (values["-MODE SLIDER-"] != previous_mode)
         frameSize = (frame0.shape[1]*int(values["-RATIO SLIDER-"]), frame0.shape[0]*int(values["-RATIO SLIDER-"]))
+        scale = int(values["-RATIO SLIDER-"])
         #out = cv2.VideoWriter('super_resolved_video.mp4', cv2.VideoWriter_fourcc(*'mp4v'), int(values["-FRAME RATE-"]),
         #                     frameSize)
         #out = cv2.VideoWriter('super_resolved_video.avi', cv2.VideoWriter_fourcc(*'DIVX'), int(values["-FRAME RATE-"]),
@@ -242,13 +260,23 @@ while True:
             #imgbytes0 = cv2.imencode(".png", frame0)[1].tobytes()
             #window["-IMAGE-"].update(data=imgbytes0)
 
+            #sg.popup("Processing, Please Wait (Press OK to proceed)")
+
+            st = time.time()
+
             if values["-MODE SLIDER-"] == 0:
-                frame = frame0
+                # bicubic
+                frame = cv2.resize(frame0, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
+                # frame = bicubic_interpolation(frame0, scale=int(values["-RATIO SLIDER-"]))
             elif values["-MODE SLIDER-"] == 1:
-                sg.popup("Processing, Please Wait (Press OK to proceed)")
-                frame = scale_waveletlanczos(frame0, ratio=int(values["-RATIO SLIDER-"]))
+                frame = dtcwt.sampling.rescale(frame0, (frame0.shape[0] * scale, frame0.shape[1] * scale), "lanczos")
             elif values["-MODE SLIDER-"] == 2:
-                frame = bicubic_interpolation(frame0, scale=int(values["-RATIO SLIDER-"]))
+                frame = scale_waveletlanczos(frame0, ratio=scale)
+
+            et = time.time()
+
+            print(et - st)
+
             print(np.shape(frame))
 
             cv2.imwrite(str(frame_index)+".jpg", frame)
