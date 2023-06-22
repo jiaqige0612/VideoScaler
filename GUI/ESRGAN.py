@@ -142,7 +142,7 @@ model = hub.load(SAVED_MODEL_PATH)
 def output_frame(frame):
     #video_path = r'D:\GUI\leaf.mp4'
     #frame_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\frame_path'
-    #sr_frame_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\sr_frame_path'
+    sr_frame_path = r'D:\GUI\sr_frame_path'
     output_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\output.mp4'
 
 
@@ -151,9 +151,9 @@ def output_frame(frame):
     tensor = tf.expand_dims(tensor, 0)
 
     #tmp_image = preprocess_image_cv2(tensor)
-    fake_image = model(tmp_image)
+    fake_image = model(tensor)
     fake_image = tf.squeeze(fake_image)
-    sr_frame_name = f"{frame_index}"
+    sr_frame_name = "f"
     sr_save_path = os.path.join(sr_frame_path,sr_frame_name)
     save_image(fake_image, sr_save_path)
 
@@ -162,18 +162,24 @@ def output_frame(frame):
     return fake_image.numpy()
 
 
-def output_video(video_path = r'D:\GUI\leaf.mp4', fps = 60, startframeindex = 0, endframeindex = 0):
+def output_video(video_path = r'D:\GUI\leaf.mp4', startframeindex = 0, endframeindex = 100):
     #video_path = r'D:\GUI\leaf.mp4'
-    frame_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\frame_path'
-    sr_frame_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\sr_frame_path'
-    output_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\output.mp4'
+    #frame_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\frame_path'
+    #sr_frame_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\sr_frame_path'
+    #output_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\output.mp4'
 
-    # os.makedirs(frame_path)
-    # os.makedirs(sr_frame_path)
+    frame_path = r'D:\GUI\frame_path'
+    sr_frame_path = r'D:\GUI\sr_frame_path'
+    output_path = r'D:\GUI\output.mp4'
+
+    os.makedirs(frame_path)
+    os.makedirs(sr_frame_path)
 
 
     start = time.time()
-    capture_frames(video_path,frame_path)
+    video = cv2.VideoCapture(video_path)
+    fps = video.get(cv2.CAP_PROP_FPS)
+    capture_frames(video_path, frame_path)
 
     lr_frame = os.listdir(frame_path)
 
@@ -195,8 +201,8 @@ def output_video(video_path = r'D:\GUI\leaf.mp4', fps = 60, startframeindex = 0,
 
 
 
-    frame_path = '/content/sr_frame_path'
-    output_path = '/content/drive/MyDrive/SR_consulting_project/output1.mp4'
+    frame_path =  r'D:\GUI\frame_path'
+    output_path = r'D:\GUI\output.mp4'
 
     frame_filenames = os.listdir(frame_path)
     first_frame = cv2.imread(os.path.join(frame_path, frame_filenames[0]))
