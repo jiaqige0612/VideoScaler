@@ -1,37 +1,45 @@
 import numpy as np
 import cv2
+
 def imgPad(img):
+    
+    lenY = len(img)
+    lenX = len(img[0])
 
-    padded = np.empty(shape = (74,74,3), dtype = int)
-    padded[5:69,5:69,:] = img
+    padded = np.empty(shape = (lenX+10,lenY+10,3), dtype = int)
+    padded[5:lenX+5,5:lenY+5,:] = img
 
-
+    lenPY = lenY+10
+    lenPX = lenX+10
 
     for i in range(5,0,-1):
-      for x in range(i,len(padded[0])-i):
+      for x in range(i,lenPX-i):
         padded[i-1,x,:] = padded[i,x,:]
-      for x in range(i,len(padded[0])-i):
-        padded[len(padded)-i,x,:] = padded[len(padded)-i-1,x,:]
-      for y in range(i,len(padded)-i):
+      for x in range(i,lenPX-i):
+        padded[lenPY-i,x,:] = padded[lenPY-i-1,x,:]
+      for y in range(i,lenPY-i):
         padded[y,i-1,:] = padded[y,i,:]
-      for y in range(i,len(padded)-i):
-        padded[y,len(padded[0])-i,:] = padded[y,len(padded[0])-i-1,:]
+      for y in range(i,lenPY-i):
+        padded[y,lenPX-i,:] = padded[y,lenPX-i-1,:]
 
       padded[i-1,i-1,:] = padded[i,i,:]
-      padded[i-1,len(padded[0])-i,:] = padded[i,len(padded[0])-i-1,:]
-      padded[len(padded)-i,i-1,:] = padded[len(padded)-i-1,i,:]
-      padded[len(padded)-i,len(padded[0])-i,:] = padded[len(padded)-i-1,len(padded[0])-i-1,:]
+      padded[i-1,lenPX-i,:] = padded[i,lenPX-i-1,:]
+      padded[lenPY-i,i-1,:] = padded[lenPY-i-1,i,:]
+      padded[lenPY-i,lenPX-i,:] = padded[lenPY-i-1,lenPX-i-1,:]
 
 
     return padded
 
 def imgExpand(img):
+  
+  lenX = len(img[0])*2
+  lenY = len(img)*2
 
-  scaled = np.zeros(shape = (148,148,3), dtype = int)
+  scaled = np.zeros(shape = (lenX,lenY,3), dtype = int)
 
   for c in range(0,3):
-    for x in range(0,148):
-      for y in range(0,148):
+    for x in range(0,lenY):
+      for y in range(0,lenX):
         if((x%2 == 0) and (y%2 == 0)):
 
           scaled[x][y][c] = int(img[int(x/2)][int(y/2)][c])
@@ -144,7 +152,8 @@ def SRwLocalStructEst(img, esf = 2):
   stage2(scaled[:,:,1], esf)
   stage2(scaled[:,:,2], esf)
 
-  return scaled[10:138,10:138,:]
+  return scaled[10:len(scaled[0])-10,10:len(scaled)-10,:]
+
 
 def divide_image_into_blocks(image, block_size):
     #divide into 64 by 64 blocks
