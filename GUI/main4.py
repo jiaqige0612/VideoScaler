@@ -30,7 +30,9 @@ from DTCWTLanczos import scale_waveletlanczos
 from Bicubic import bicubic_interpolation
 import time
 from ESRGAN import output_frame
-
+from ESRGAN import output_video
+from Edge import upscale_edge
+from LocalStruct import LocalStruct
 
 # First the window layout in 2 columns
 # pip install "numpy<1.24.0"
@@ -88,10 +90,6 @@ file_list_column = [
         #     key="-FRAME SLIDER-",
         # ),
         sg.InputText(key="-END FRAME SLIDER-"),
-    ],
-    [
-        sg.Text("Choose Frame Rate:"),
-        sg.InputText(key="-FRAME RATE-"),
         sg.Button("Produce Super-resolved Video", bind_return_key=False, visible=True)
     ],
     [sg.Text("Choose Super-resolution mode"),
@@ -219,11 +217,15 @@ while True:
         elif values["-MODE SLIDER-"] == 1:
             frame = dtcwt.sampling.rescale(frame0, (frame0.shape[0] * scale, frame0.shape[1] * scale), "lanczos")
         elif values["-MODE SLIDER-"] == 2:
-            frame = scale_waveletlanczos(frame0, ratio=scale)
+            frame = scale_waveletlanczos(frame0, scale=scale)
         elif values["-MODE SLIDER-"] == 3:
-            frame = output_frame(frame0)
-            #output_path = output_frame()
-            #frame = cv2.imread(output_path)
+            sg.popup("Processing, ratio limited to 4 for SRGAN")
+            temp_frame = output_frame(frame0)
+            frame = cv2.cvtColor(cv2.imread(r"D:\GUI\sr_frame_path\f.jpg"), cv2.COLOR_RGB2BGR)
+        elif values["-MODE SLIDER-"] == 4:
+            frame = upscale_edge(frame0, scale)
+        elif values["-MODE SLIDER-"] == 5:
+            frame = LocalStruct(frame0, scale)
 
         et = time.time()
         print(et-st)
@@ -242,6 +244,7 @@ while True:
     elif (video != []) and (event == "Produce Super-resolved Video"):
         video.set(cv2.CAP_PROP_POS_FRAMES, int(values["-FRAME SLIDER-"]))
         ret0, frame0 = video.read()
+        fps = video.get(cv2.CAP_PROP_FPS)
         # values["-FRAME SLIDER-"] != previous_frame_val) or (values["-MODE SLIDER-"] != previous_mode)
         frameSize = (frame0.shape[1]*int(values["-RATIO SLIDER-"]), frame0.shape[0]*int(values["-RATIO SLIDER-"]))
         scale = int(values["-RATIO SLIDER-"])
@@ -253,57 +256,68 @@ while True:
         # out_video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), int(values["-FRAME RATE-"]), frameSize)
         # image_folder = r'C:\Users\jiaqi\PycharmProjects\pythonProject'
         sg.popup("Processing Video, Please Wait. (Press OK to Proceed)")
-        for frame_index in range(int(values["-FRAME SLIDER-"]), int(values["-END FRAME SLIDER-"])):
-            video.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
-            ret0, frame0 = video.read()
+        if values["-MODE SLIDER-"]==3:
+            output_video(video_path=r'D:\GUI\leaf.mp4', startframeindex=0, endframeindex=100)
+            #SRGAN need to run on Google colab
+            #Can run locally but not ideal
+        else:
+            for frame_index in range(int(values["-FRAME SLIDER-"]), int(values["-END FRAME SLIDER-"])):
+                video.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
+                ret0, frame0 = video.read()
 
-            #imgbytes0 = cv2.imencode(".png", frame0)[1].tobytes()
-            #window["-IMAGE-"].update(data=imgbytes0)
+                #imgbytes0 = cv2.imencode(".png", frame0)[1].tobytes()
+                #window["-IMAGE-"].update(data=imgbytes0)
 
-            #sg.popup("Processing, Please Wait (Press OK to proceed)")
+                #sg.popup("Processing, Please Wait (Press OK to proceed)")
 
-            st = time.time()
+                st = time.time()
 
-            if values["-MODE SLIDER-"] == 0:
-                # bicubic
-                frame = cv2.resize(frame0, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
-                # frame = bicubic_interpolation(frame0, scale=int(values["-RATIO SLIDER-"]))
-            elif values["-MODE SLIDER-"] == 1:
-                frame = dtcwt.sampling.rescale(frame0, (frame0.shape[0] * scale, frame0.shape[1] * scale), "lanczos")
-            elif values["-MODE SLIDER-"] == 2:
-                frame = scale_waveletlanczos(frame0, ratio=scale)
+                if values["-MODE SLIDER-"] == 0:
+                    # bicubic
+                    frame = cv2.resize(frame0, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
+                    # frame = bicubic_interpolation(frame0, scale=int(values["-RATIO SLIDER-"]))
+                elif values["-MODE SLIDER-"] == 1:
+                    frame = dtcwt.sampling.rescale(frame0, (frame0.shape[0] * scale, frame0.shape[1] * scale), "lanczos")
+                elif values["-MODE SLIDER-"] == 2:
+                    frame = scale_waveletlanczos(frame0, scale=scale)
+                elif values["-MODE SLIDER-"] == 4:
+                    frame = upscale_edge(frame0, scale)
+                elif values["-MODE SLIDER-"] == 5:
+                    frame = LocalStruct(frame0, scale)
 
-            et = time.time()
 
-            print(et - st)
+                et = time.time()
 
-            print(np.shape(frame))
+                print(et - st)
 
-            cv2.imwrite(str(frame_index)+".jpg", frame)
+                print(np.shape(frame))
 
-            #out.write(frame)
+                cv2.imwrite(str(frame_index)+".jpg", frame)
 
-        image_folder = r'C:\Users\jiaqi\PycharmProjects\pythonProject'
-        video_name = 'video.avi'
+                #out.write(frame)
 
-        images = [img for img in os.listdir(image_folder) if img.endswith(".jpg")]
-        frame1 = cv2.imread(os.path.join(image_folder, images[0]))
-        height, width, layers = frame1.shape
+            image_folder = r'D:\GUI'
+            #image_folder = r'C:\Users\jiaqi\PycharmProjects\pythonProject'
+            #video_name = 'video.avi'
 
-        #out_video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), int(values["-FRAME RATE-"]), frameSize)
-        out_video = cv2.VideoWriter(video_name, 0, int(values["-FRAME RATE-"]), (width, height))
+            images = [img for img in os.listdir(image_folder) if img.endswith(".jpg")]
+            frame1 = cv2.imread(os.path.join(image_folder, images[0]))
+            height, width, layers = frame1.shape
 
-        for frame_index in range(int(values["-FRAME SLIDER-"]), int(values["-END FRAME SLIDER-"])):
-            print(str(frame_index)+".jpg")
-            out_video.write(cv2.imread(os.path.join(image_folder, str(frame_index)+".jpg")))
-            os.remove(os.path.join(image_folder, str(frame_index)+".jpg"))
-        #for image in images:
-            #print(image)
-            #out_video.write(cv2.imread(os.path.join(image_folder, image)))
-            #os.remove(os.path.join(image_folder, image))
+            #out_video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), int(values["-FRAME RATE-"]), frameSize)
+            out_video = cv2.VideoWriter(video_name, 0, fps, (width, height))
 
-        cv2.destroyAllWindows()
-        out_video.release()
+            for frame_index in range(int(values["-FRAME SLIDER-"]), int(values["-END FRAME SLIDER-"])):
+                print(str(frame_index)+".jpg")
+                out_video.write(cv2.imread(os.path.join(image_folder, str(frame_index)+".jpg")))
+                os.remove(os.path.join(image_folder, str(frame_index)+".jpg"))
+            #for image in images:
+                #print(image)
+                #out_video.write(cv2.imread(os.path.join(image_folder, image)))
+                #os.remove(os.path.join(image_folder, image))
+
+            cv2.destroyAllWindows()
+            out_video.release()
 
         #out.release()
         sg.popup("Video Super-resolution Completed. Processed video saved under " + str(directorysave) + ".")
