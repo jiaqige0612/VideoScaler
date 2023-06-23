@@ -140,23 +140,23 @@ def stage2weights(img, x, y, esf):
 
 
 def stage1(img, esf):
-    for x in range(5, len(img) - 5):
-        for y in range(5, len(img) - 5):
-            if ((x % 2 == 0) or (y % 2 == 0)):
-                continue
-            else:
-                img[x][y] = stage1weights(img, x, y, esf)
-    return img
+  for x in range(5,len(img)-5,2):
+    for y in range(5,len(img)-5,2):
+      img[x][y] = stage1weights(img, x, y, esf)
+        
+  return img
 
 
 def stage2(img, esf):
-    for x in range(10, len(img) - 10):
-        for y in range(10, len(img) - 10):
-            if ((x + y) % 2 == 0):
-                continue
-            else:
-                img[x][y] = stage2weights(img, x, y, esf)
-    return img
+  for y in range(10, len(img)-10,1):
+    if(y%2 == 0):
+      p = 11
+    else:
+      p = 10
+    for x in range(p, len(img)-10, 2):
+      img[x][y] = stage2weights(img, x, y, esf)
+      
+  return img
 
 
 def SRwLocalStructEst(img, esf=3):
