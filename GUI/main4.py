@@ -37,8 +37,8 @@ from LocalStruct import LocalStruct
 # First the window layout in 2 columns
 # pip install "numpy<1.24.0"
 
-directorysave = r'C:\GUI'
-filenamesave = 'savedImage.jpg'
+directorysave = r'D:\GUI'
+filenamesave = 'savedImage.png'
 
 sg.theme('LightGrey1')
 # sg. theme_background_color('#DCDCDC')
@@ -65,6 +65,11 @@ file_list_column = [
     ],
     [
         sg.Image(key="-IMAGE-")
+    ],
+    [
+        sg.Text('Output Image Format'), sg.Combo(['.png', '.jpg', '.bmp'], size=(10, 1), key="-Image Format-"),
+        sg.Text('Output Video Format'), sg.Combo(['.mp4', '.avi', '.mov'], size=(10, 1), key="-Video Format-"),
+        sg.Text('Output File Name'), sg.Input(key="-FILE NAME-")
     ],
     [
         sg.Text("Choose Start Frame Index:"),
@@ -164,7 +169,7 @@ while True:
             f
             for f in file_list
             if os.path.isfile(os.path.join(folder, f))
-            and f.lower().endswith((".mp4"))
+            and f.lower().endswith((".mp4", ".mov", ".avi"))
         ]
         window["-FILE LIST-"].update(fnames)
     elif event == "-FILE LIST-":  # A file was chosen from the listbox
@@ -221,7 +226,7 @@ while True:
         elif values["-MODE SLIDER-"] == 3:
             sg.popup("Processing, ratio limited to 4 for SRGAN")
             temp_frame = output_frame(frame0)
-            frame = cv2.cvtColor(cv2.imread(r"D:\GUI\sr_frame_path\f.jpg"), cv2.COLOR_RGB2BGR)
+            frame = cv2.cvtColor(cv2.imread(r"D:\GUI\sr_frame_path\f.png"), cv2.COLOR_RGB2BGR)
         elif values["-MODE SLIDER-"] == 4:
             frame = upscale_edge(frame0, scale)
         elif values["-MODE SLIDER-"] == 5:
@@ -236,10 +241,18 @@ while True:
         window["-IMAGE-1"].update(data=imgbytes)
 
         #cv2.imshow("", frame)
-        cv2.imwrite(filenamesave, frame)
+        image_path = 'savedImage.png'
+        #image_path = 'savedImage.bmp'
+        if values["-Image Format-"] == '.jpg' or values["-Image Format-"] == '.bmp' or values["-Image Format-"] == '.png':
+            image_path = values["-FILE NAME-"] + values["-Image Format-"]
+            #if values["-FILE NAME-"] != []:
+                #image_path = values["-FILE NAME-"] + values["-Image Format-"]
+        #else:
+                #image_path = "savedimage" + values["-Image Format-"]
 
+        cv2.imwrite(image_path, frame)
 
-        sg.popup("Super-resolution Completed. Processed frame saved as image under " + str(directorysave) + ".")
+        sg.popup("Super-resolution Completed. Processed frame saved as " + str(image_path) +  " under " + str(directorysave) + ".")
 
     elif (video != []) and (event == "Produce Super-resolved Video"):
         video.set(cv2.CAP_PROP_POS_FRAMES, int(values["-FRAME SLIDER-"]))
@@ -248,6 +261,16 @@ while True:
         # values["-FRAME SLIDER-"] != previous_frame_val) or (values["-MODE SLIDER-"] != previous_mode)
         frameSize = (frame0.shape[1]*int(values["-RATIO SLIDER-"]), frame0.shape[0]*int(values["-RATIO SLIDER-"]))
         scale = int(values["-RATIO SLIDER-"])
+
+        image_folder = r'D:\GUI'
+        video_name = 'video.avi'
+
+        video_path = video_name
+        #image_path = 'savedImage.bmp'
+        if values["-Video Format-"] == '.mp4' or values["-Video Format-"] == '.avi' or values["-Video Format-"] == '.mov':
+            video_path = values["-FILE NAME-"] + values["-Video Format-"]
+
+
         #out = cv2.VideoWriter('super_resolved_video.mp4', cv2.VideoWriter_fourcc(*'mp4v'), int(values["-FRAME RATE-"]),
         #                     frameSize)
         #out = cv2.VideoWriter('super_resolved_video.avi', cv2.VideoWriter_fourcc(*'DIVX'), int(values["-FRAME RATE-"]),
@@ -256,8 +279,8 @@ while True:
         # out_video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), int(values["-FRAME RATE-"]), frameSize)
         # image_folder = r'C:\Users\jiaqi\PycharmProjects\pythonProject'
         sg.popup("Processing Video, Please Wait. (Press OK to Proceed)")
-        if values["-MODE SLIDER-"]==3:
-            output_video(video_path=r'D:\GUI\leaf.mp4', startframeindex=0, endframeindex=100)
+        if values["-MODE SLIDER-"] == 3:
+            output_video(video_path=os.path.join(image_folder, video_path), startframeindex=0, endframeindex=100)
             #SRGAN need to run on Google colab
             #Can run locally but not ideal
         else:
@@ -292,25 +315,32 @@ while True:
 
                 print(np.shape(frame))
 
-                cv2.imwrite(str(frame_index)+".jpg", frame)
+                cv2.imwrite(str(frame_index)+".png", frame)
 
                 #out.write(frame)
 
-            image_folder = r'D:\GUI'
             #image_folder = r'C:\Users\jiaqi\PycharmProjects\pythonProject'
-            #video_name = 'video.avi'
 
-            images = [img for img in os.listdir(image_folder) if img.endswith(".jpg")]
+            images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
             frame1 = cv2.imread(os.path.join(image_folder, images[0]))
             height, width, layers = frame1.shape
 
             #out_video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), int(values["-FRAME RATE-"]), frameSize)
-            out_video = cv2.VideoWriter(video_name, 0, fps, (width, height))
+            if values["-Video Format-"] == ".mp4":
+                out_video = cv2.VideoWriter(video_path, cv2.VideoWriter_fourcc(*'mp4v'), fps,
+                                            (width, height))
+            elif values["-Video Format-"] == ".mov":
+                out_video = cv2.VideoWriter(video_path, cv2.VideoWriter_fourcc('X','V','I','D'), fps,
+                                            (width, height))
+                #hev1
+            else:
+                out_video = cv2.VideoWriter(video_path, cv2.VideoWriter_fourcc('I','4','2','0'), fps, (width, height))
+
 
             for frame_index in range(int(values["-FRAME SLIDER-"]), int(values["-END FRAME SLIDER-"])):
-                print(str(frame_index)+".jpg")
-                out_video.write(cv2.imread(os.path.join(image_folder, str(frame_index)+".jpg")))
-                os.remove(os.path.join(image_folder, str(frame_index)+".jpg"))
+                print(str(frame_index)+".png")
+                out_video.write(cv2.imread(os.path.join(image_folder, str(frame_index)+".png")))
+                os.remove(os.path.join(image_folder, str(frame_index)+".png"))
             #for image in images:
                 #print(image)
                 #out_video.write(cv2.imread(os.path.join(image_folder, image)))
@@ -320,7 +350,7 @@ while True:
             out_video.release()
 
         #out.release()
-        sg.popup("Video Super-resolution Completed. Processed video saved under " + str(directorysave) + ".")
+        sg.popup("Video Super-resolution Completed. Processed video saved as " + str(video_path) + " under " + str(directorysave) + ".")
 
         # print(np.shape(converted))
         #cv2.imshow("", frame)
