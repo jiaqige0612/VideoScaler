@@ -31,7 +31,7 @@ def capture_frames(video_path, frame_path):
             break
 
         # Save the frame as an image
-        frame_filename = f"{frame_count}.jpg"  # Specify the frame filename
+        frame_filename = f"{frame_count}.png"  # Specify the frame filename
         frame_filepath = f"{frame_path}/{frame_filename}"  # Specify the frame file path
         cv2.imwrite(frame_filepath, frame)
 
@@ -57,7 +57,7 @@ def create_video_from_frames(frame_path, output_path, fps):
 
     # Loop through each frame file and write it to the output video
     for i in range(0,len(frame_filenames)):
-        filename = str(i)+'.jpg'
+        filename = str(i)+'.png'
         frame_filepath = os.path.join(frame_path,filename)
         # frame_filepath = os.path.join(frame_path, frame_filename)
         frame = cv2.imread(frame_filepath)
@@ -134,8 +134,8 @@ def save_image(image, filename):
   if not isinstance(image, Image.Image):
     image = tf.clip_by_value(image, 0, 255)
     image = Image.fromarray(tf.cast(image, tf.uint8).numpy())
-  image.save("%s.jpg" % filename)
-  print("Saved as %s.jpg" % filename)
+  image.save("%s.png" % filename)
+  print("Saved as %s.png" % filename)
 
 model = hub.load(SAVED_MODEL_PATH)
 
@@ -185,7 +185,7 @@ def output_video(video_path = r'D:\GUI\leaf.mp4', startframeindex = 0, endframei
 
 
     for i in range(startframeindex, endframeindex):
-        lr_framepath = str(i)+'.jpg'
+        lr_framepath = str(i)+'.png'
         tmp_path = os.path.join(frame_path,lr_framepath)
         tmp_image = preprocess_image(tmp_path)
         fake_image = model(tmp_image)
@@ -195,7 +195,7 @@ def output_video(video_path = r'D:\GUI\leaf.mp4', startframeindex = 0, endframei
         save_image(fake_image,sr_save_path)
 
 
-    create_video_from_frames(sr_frame_path, output_path, fps)
+    #create_video_from_frames(sr_frame_path, output_path, fps)
 
     print("Time Taken: %f" % (time.time() - start))
 
@@ -213,11 +213,11 @@ def output_video(video_path = r'D:\GUI\leaf.mp4', startframeindex = 0, endframei
 
     # Loop through each frame file and write it to the output video
     for i in range(0,315):
-        filename = str(i)+'.jpg'
+        filename = str(i)+'.png'
         frame_filepath = os.path.join(frame_path, filename)
         # frame = cv2.imread(frame_filepath)
         output_video.write(cv2.imread(frame_filepath))
-        print('Frame written:', str(i),'.jpg')
+        print('Frame written:', str(i),'.png')
 
     # Release the resources
     cv2.destroyAllWindows()
