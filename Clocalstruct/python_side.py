@@ -16,7 +16,7 @@ import cv2
 #the return and argument types are set
 
 
-alg = cdll.LoadLibrary('./lib.so').alg
+alg = cdll.LoadLibrary('./Clocalstruct/lib.so').alg
 alg.restype = ndpointer(c_uint8, flags="C_CONTIGUOUS", shape = (128, 128))
 alg.argtypes = [ndpointer(c_uint8, flags="C_CONTIGUOUS", shape = (64, 64)), c_uint16, c_uint16]
 
@@ -24,11 +24,10 @@ alg.argtypes = [ndpointer(c_uint8, flags="C_CONTIGUOUS", shape = (64, 64)), c_ui
 #####################################################################################################################################################################
 #obtain test image by downloading imagenet and converting YCrBr
 
-image = cv2.imread('test_1050.JPEG')
+image = cv2.imread('./Clocalstruct/test_1050.JPEG')
 img = cv2.cvtColor(image, cv2.COLOR_BGR2YCR_CB)
 
-plt.imshow(img[:,:,0], cmap = 'gray')
-#plt.show()
+
 img = np.array(img[:,:,0], dtype = c_uint8)
 #####################################################################################################################################################################
 #Function with which to call the algorithm, the algorithm will split the image into 128x128 chunks so 
@@ -45,7 +44,11 @@ res = SRwLocalStruct(img, 64, 64)
 
 
 
-plt.imshow(res, cmap = 'gray')
+fig, ax = plt.subplots(1, 3, figsize = (15,15))
+
+ax[0].imshow(img, cmap = "gray")
+ax[1].imshow(res, cmap = "gray")
+
 plt.show()
 
 
