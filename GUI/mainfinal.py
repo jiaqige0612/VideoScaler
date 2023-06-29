@@ -33,7 +33,6 @@ from Bicubic import bicubic_interpolation
 import time
 from ESRGAN import output_frame
 from ESRGAN import output_video
-from Edge import upscale_edge
 from LocalStruct import LocalStruct
 
 # First the window layout in 2 columns
