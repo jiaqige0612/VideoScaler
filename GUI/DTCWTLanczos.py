@@ -57,7 +57,7 @@ def scale_waveletlanczos(ds_frame):
 
       # Transform mandrill
       #one level
-      mandrill_l, mandrill_h = dtcwt.compat.dtwavexfm2(mandrill[:, :, i], nlevels=1)
+      mandrill_l, mandrill_h = dtcwt.compat.dtwavexfm2(mandrill[:, :, i], nlevels=1, biort='antonini', qshift= 'qshift_b_bp')
 
 
       mandrill_l = scale_direct(mandrill[:, :, i])
@@ -69,7 +69,7 @@ def scale_waveletlanczos(ds_frame):
           mandrill_h_b.append(scale_highpass(h))
 
       # Transform back
-      mandrill_b = dtcwt.compat.dtwaveifm2(mandrill_l, mandrill_h_b)
+      mandrill_b = dtcwt.compat.dtwaveifm2(mandrill_l, mandrill_h_b, biort='antonini', qshift= 'qshift_b_bp')
 
       trans_result[:, :, i] = mandrill_b
 
