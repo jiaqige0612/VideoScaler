@@ -22,7 +22,7 @@ Our project focuses on video and image upscaling and we have implemented various
  
 We do our best to create a good user experience as our first priority, ensuring ease of use, accessibility, and user-friendly design in the GUI to accommodate both professional users and those with limited technical expertise.
 
-## Evaluation Metrics and Performance considerations
+## Evaluation Metrics and Performance Considerations
 There are several common performance measurement scales that are used to evaluate the quality and effectiveness of up-scaling algorithms and of the application software. In this project, PSNR(Peak Signal-to-Noise Ratio) and SSIM(Structural Similarity Index) metrics are used. 
 
 PSNR measures the ratio between the maximum possible power of a signal (the original image) and the power of the noise (the difference between the original and up-scaled images). While SSIM compares the structural information of the original and up-scaled images. It takes brightness, contrast, and structural similarity into account and ranges from -1 to 1, with 1 indicating identical images. The higher these two scales are usually indicates the better of image similarities and performance the method is. However, it is possible to have algorithms which achieve high scores on objective metrics but still produce visually unsatisfactory results.
