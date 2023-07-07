@@ -28,3 +28,10 @@ There are several common performance measurement scales that are used to evaluat
 PSNR measures the ratio between the maximum possible power of a signal (the original image) and the power of the noise (the difference between the original and up-scaled images). While SSIM compares the structural information of the original and up-scaled images. It takes brightness, contrast, and structural similarity into account and ranges from -1 to 1, with 1 indicating identical images. The higher these two scales are usually indicates the better of image similarities and performance the method is. However, it is possible to have algorithms which achieve high scores on objective metrics but still produce visually unsatisfactory results.
 
 Other scales such as execution time, as well as estimated number of ALM (Adaptive Logic Module) needed for implementing the algorithms on FPGA are also taken into consideration.
+
+## Documentation
+[Literature Review](Literature_Review.pdf)
+[Design Process Outline](Literature_Review.pdf)
+[Meeting and Decision Record](Literature_Review.pdf)
+[Test Results](Literature_Review.pdf)
+[Complete Design History File](Literature_Review.pdf)
