@@ -18,59 +18,45 @@ import dtcwt.compat
 import dtcwt.sampling
 
 # Use an off-screen backend for matplotlib
-import matplotlib
-matplotlib.use('agg')
+# import matplotlib
+# matplotlib.use('agg')
 
 # Import numpy and matplotlib's pyplot interface
 import numpy as np
-from matplotlib.pyplot import *
+#from matplotlib.pyplot import *
 
 # Get a copy of the famous 'mandrill' image. In the default dtcwt tree, we ship
 # one with the tests. The mandrill image is 512x512, floating point and has pixel
 # values on the interval (0, 1].
 
-def scale_waveletlanczos(ds_frame):
+def scale_waveletlanczos(ds_frame, scale = 2):
 
-    mandrill = ds_frame
+    def upscale(im):
+        #scale low frequency sub-band
+        return dtcwt.sampling.rescale(im, (im.shape[0]*scale, im.shape[1]*scale), 'lanczos')
 
-
-    # We will try to re-scale mandrill by this amount and method
-    scale = 2
-    scale_method = 'lanczos'
-
-    def scale_direct(im):
-        """Scale image directly."""
-        return dtcwt.sampling.rescale(im, (im.shape[0]*scale, im.shape[1]*scale), scale_method)
-        #return dtcwt.sampling.upsample(im,scale_method)
-
-    def scale_highpass(im):
-        """Scale image assuming it to be wavelet highpass coefficients."""
-        return dtcwt.sampling.rescale_highpass(im, (im.shape[0]*scale, im.shape[1]*scale), scale_method)
-        #return dtcwt.sampling.upsample_highpass(im, scale_method)
+    def upscale_hf(im):
+        #scale high frequency sub-band
+        return dtcwt.sampling.rescale_highpass(im, (im.shape[0]*scale, im.shape[1]*scale), 'lanczos')
 
     trans_result = np.empty((ds_frame.shape[0]*scale, ds_frame.shape[1]*scale, ds_frame.shape[2]))
 
 
     for i in range (3):
-      # Rescale mandrill directly using default (Lanczos) sampling
-      #mandrill_direct = scale_direct(mandrill[:,:,i])
 
-      # Transform mandrill
-      #one level
-      mandrill_l, mandrill_h = dtcwt.compat.dtwavexfm2(mandrill[:, :, i], nlevels=1, biort='antonini', qshift= 'qshift_b_bp')
+      # Transform ds_frame
+      dsframe_l, dsframe_h = dtcwt.compat.dtwavexfm2(ds_frame[:, :, i], nlevels=1, biort='antonini')
 
 
-      mandrill_l = scale_direct(mandrill[:, :, i])
+      dsframe_l = upscale(ds_frame[:, :, i])
 
-      mandrill_h_b = []
+      dsframe_h_a = []
 
-      for h in mandrill_h:
+      for h in dsframe_h:
           print(h.shape)
-          mandrill_h_b.append(scale_highpass(h))
+          dsframe_h_a.append(upscale_hf(h))
 
-      # Transform back
-      mandrill_b = dtcwt.compat.dtwaveifm2(mandrill_l, mandrill_h_b, biort='antonini', qshift= 'qshift_b_bp')
-
-      trans_result[:, :, i] = mandrill_b
+      # Inverse transform
+      trans_result[:, :, i] = dtcwt.compat.dtwaveifm2(dsframe_l, dsframe_h_a, biort='antonini')
 
     return trans_result
