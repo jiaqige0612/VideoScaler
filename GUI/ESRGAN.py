@@ -8,7 +8,9 @@ import tensorflow_hub as hub
 import matplotlib.pyplot as plt
 import multiprocessing
 
+os.environ['TFHUB_CACHE_DIR'] = 'D:/tf_cache'
 os.environ["TFHUB_DOWNLOAD_PROGRESS"] = "True"
+
 
 SAVED_MODEL_PATH = "https://tfhub.dev/captain-pool/esrgan-tf2/1"
 
@@ -162,7 +164,7 @@ def output_frame(frame):
     return fake_image.numpy()
 
 
-def output_video(video_path = r'D:\GUI\leaf.mp4', startframeindex = 0, endframeindex = 100):
+def output_video(video_path = r'D:\GUI\leaf.mp4', startframeindex = 0, endframeindex = 100, output_path = r'D:\GUI\savedVideo.avi', format = ".avi"):
     #video_path = r'D:\GUI\leaf.mp4'
     #frame_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\frame_path'
     #sr_frame_path = r'C:\Users\jiaqi\PycharmProjects\pythonProject\sr_frame_path'
@@ -170,10 +172,11 @@ def output_video(video_path = r'D:\GUI\leaf.mp4', startframeindex = 0, endframei
 
     frame_path = r'D:\GUI\frame_path'
     sr_frame_path = r'D:\GUI\sr_frame_path'
-    output_path = r'D:\GUI\output.mp4'
 
-    os.makedirs(frame_path)
-    os.makedirs(sr_frame_path)
+    if not os.path.exists(frame_path):
+        os.makedirs(frame_path)
+    if not os.path.exists(sr_frame_path):
+        os.makedirs(sr_frame_path)
 
 
     start = time.time()
@@ -202,14 +205,21 @@ def output_video(video_path = r'D:\GUI\leaf.mp4', startframeindex = 0, endframei
 
 
     frame_path =  r'D:\GUI\frame_path'
-    output_path = r'D:\GUI\output.mp4'
 
     frame_filenames = os.listdir(frame_path)
     first_frame = cv2.imread(os.path.join(frame_path, frame_filenames[0]))
     height, width, _ = first_frame.shape
 
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Specify the codec (e.g., XVID, MJPG, mp4v)
-    output_video = cv2.VideoWriter(output_path, fourcc, 30.0, (width, height))
+    if format == ".mp4":
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    elif format == ".mov":
+        fourcc = cv2.VideoWriter_fourcc('X', 'V', 'I', 'D')
+        # hev1
+    else:
+        fourcc = cv2.VideoWriter_fourcc('I', '4', '2', '0')
+
+    #fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Specify the codec (e.g., XVID, MJPG, mp4v)
+    output_video = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
 
     # Loop through each frame file and write it to the output video
     for i in range(0,315):
