@@ -1,6 +1,22 @@
 #!/bin/bash
 
-gcc -Wall -O3 -c -fpic src/localStructV1.c -o src/localStructV1.o 2> log/V1.txt 
+echo "exec"
+echo "exec"
+echo "exec"
+echo "exec"
+echo "exec"
+echo "exec"
+echo "exec"
+echo "exec"
+echo "exec"
+echo "exec"
+echo "exec"
+echo "exec"
+echo "exec"
+
+cd C:/Users/kiril/OneDrive/Documents/compvision_cw/VideoScaler/Algorithms/Clocalstruct
+
+g++ -Wall -O3 -c -fpic src/localStructV1.cpp -o src/localStructV1.o 2> log/V1.txt 
 gcc -shared -o lib/localStructV1.so src/localStructV1.o 2> log/V1lib.txt
 rm src/localStructV1.o
 

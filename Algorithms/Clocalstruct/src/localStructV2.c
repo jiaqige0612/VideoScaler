@@ -74,55 +74,55 @@ void stage1(uint8_t * val, uint16_t x, uint16_t y, uint16_t xdim, uint16_t ydim)
 
     /*initial arbitrary interpolation of the missing HR pixel along both diagonals*/
 
-    int16_t interpX45 = 5*(*(val + xdim*(y+1 - *(B)) + (x+1 - *(R)))) - *(val + xdim*(y+3 - *(B +1)) + x+3 - *(R+1))>>2; 
+    int16_t interpX45 = (5*(*(val + xdim*(y+1 - *(B)) + (x+1 - *(R)))) - *(val + xdim*(y+3 - *(B +1)) + x+3 - *(R+1))); 
 
-    int16_t interpX135 = 5*((*(val + xdim*(y+1 - *(B)) + (x-1 + *(L))))) - (*(val + xdim*(y+3 - *(B+1)) + x-3 + *(L+1)))>>2; 
+    int16_t interpX135 = (5*((*(val + xdim*(y+1 - *(B)) + (x-1 + *(L))))) - (*(val + xdim*(y+3 - *(B+1)) + x-3 + *(L+1)))); 
 
-    int16_t interpX225 = 5*((*(val + xdim*(y-1 - *(B)) + (x-1 + *(L))))) - (*(val + xdim*(y-3 - *(B+1)) + x-3 + *(L+1)))>>2; 
+    int16_t interpX225 = (5*((*(val + xdim*(y-1 - *(B)) + (x-1 + *(L))))) - (*(val + xdim*(y-3 - *(B+1)) + x-3 + *(L+1)))); 
 
-    int16_t interpX315 = 5*(*(val + xdim*(y-1 - *(B)) + (x+1 - *(R)))) - *(val + xdim*(-+3 - *(B +1)) + x+3 - *(R+1))>>2; 
+    int16_t interpX315 = (5*(*(val + xdim*(y-1 - *(B)) + (x+1 - *(R)))) - *(val + xdim*(y-3 - *(B +1)) + x+3 - *(R+1))); 
 
 
     /*arbitrary interpolation for four nearest LR neighbours of missing HR pixel*/
 
     /********************************************************************************************************************************************/
-    int16_t interpA45 = (-(*(val + xdim*(y+5 - *(B+2)) + x+5 - *(R+2))) + 5*((*(val + xdim*(y+3 - *(B+1)) + (x+3 - *(R+1))))))>>2;
+    int16_t interpA45 = (-(*(val + xdim*(y+5 - *(B+2)) + x+5 - *(R+2))) + 5*((*(val + xdim*(y+3 - *(B+1)) + (x+3 - *(R+1))))));
 
-    int16_t interpA225 = (5*((*(val + xdim*(y-1 + *(A)) + (x-1 + *(L))))) - (*(val + xdim*(y-3 + *(A+1)) + x-3 + *(L+1))))>>2; 
+    int16_t interpA225 = (5*((*(val + xdim*(y-1 + *(A)) + (x-1 + *(L))))) - (*(val + xdim*(y-3 + *(A+1)) + x-3 + *(L+1)))); 
 
-    int16_t interpA135 = (-(*(val + xdim*(y+5 - *(B+2)) + x-3 + *(L+1))) + 5*((*(val + xdim*(y+3 - *(B+1)) + (x-1 + *(L))))))>>2;
+    int16_t interpA135 = (-(*(val + xdim*(y+5 - *(B+2)) + x-3 + *(L+1))) + 5*((*(val + xdim*(y+3 - *(B+1)) + (x-1 + *(L))))));
 
-    int16_t interpA315 =  (5*((*(val + xdim*(y-1 + *(A)) + (x+3 - *(B+1))))) - (*(val + xdim*(y-3 + *(A+1)) + x+5 - *(R+2))))>>2; 
+    int16_t interpA315 =  (5*((*(val + xdim*(y-1 + *(A)) + (x+3 - *(B+1))))) - (*(val + xdim*(y-3 + *(A+1)) + x+5 - *(R+2)))); 
     /********************************************************************************************************************************************/
 
     /********************************************************************************************************************************************/
-    int16_t interpB45 = (-(*(val + xdim*(y+3 - *(B+1)) + x+5 - *(R+2))) + 5*((*(val + xdim*(y+1 - *(B)) + (x+3 - *(R+1))))))>>2;
+    int16_t interpB45 = (-(*(val + xdim*(y+3 - *(B+1)) + x+5 - *(R+2))) + 5*((*(val + xdim*(y+1 - *(B)) + (x+3 - *(R+1))))));
 
-    int16_t interpB225 = (5*(((*(val + xdim*(y-3 + *(A+1)) + (x-1 + *(L))))) - (*(val + xdim*(y-5 + *(A+2)) + x-3 + *(L+1)))))>>2; 
+    int16_t interpB225 = (5*(((*(val + xdim*(y-3 + *(A+1)) + (x-1 + *(L))))) - (*(val + xdim*(y-5 + *(A+2)) + x-3 + *(L+1))))); 
 
-    int16_t interpB135 = (-(*(val + xdim*(y+3 - *(B+1)) + x-3 + *(L+1))) + 5*((*(val + xdim*(y+1 - *(B)) + (x-1 + *(L))))))>>2;
+    int16_t interpB135 = (-(*(val + xdim*(y+3 - *(B+1)) + x-3 + *(L+1))) + 5*((*(val + xdim*(y+1 - *(B)) + (x-1 + *(L))))));
 
-    int16_t interpB315 = (5*((*(val + xdim*(y-3 + *(A+1)) + (x+3 - *(R+1))))) - (*(val + xdim*(y-5 + *(A+2)) + x+5 - *(R+2))))>>2; 
+    int16_t interpB315 = (5*((*(val + xdim*(y-3 + *(A+1)) + (x+3 - *(R+1))))) - (*(val + xdim*(y-5 + *(A+2)) + x+5 - *(R+2)))); 
     /********************************************************************************************************************************************/
 
     /********************************************************************************************************************************************/
-    int16_t interpC45 = (-(*(val + xdim*(y+3 - *(B+1)) + x+3 - *(R+1))) + 5*((*(val + xdim*(y+1 - *(B)) + (x+1 - *(R))))))>>2;
+    int16_t interpC45 = (-(*(val + xdim*(y+3 - *(B+1)) + x+3 - *(R+1))) + 5*((*(val + xdim*(y+1 - *(B)) + (x+1 - *(R))))));
 
-    int16_t interpC225 = (5*((*(val + xdim*(y-3 + *(A+1)) + (x-3 + *(L+1))))) - (*(val + xdim*(y-5 + *(A+2)) + x-5 + *(L+2))))>>2; 
+    int16_t interpC225 = (5*((*(val + xdim*(y-3 + *(A+1)) + (x-3 + *(L+1))))) - (*(val + xdim*(y-5 + *(A+2)) + x-5 + *(L+2)))); 
 
-    int16_t interpC135 = (-(*(val + xdim*(y+3 - *(B+1)) + x-5 + *(L+2))) + 5*((*(val + xdim*(y+1 - *(B)) + (x-3 + *(L+1))))))>>2;
+    int16_t interpC135 = (-(*(val + xdim*(y+3 - *(B+1)) + x-5 + *(L+2))) + 5*((*(val + xdim*(y+1 - *(B)) + (x-3 + *(L+1))))));
     
-    int16_t interpC315 = (5*((*(val + xdim*(y-3 + *(A+1)) + (x+1 - *(R))))) - (*(val + xdim*(y-5 + *(A+2)) + x+3 - *(R+1))))>>2; 
+    int16_t interpC315 = (5*((*(val + xdim*(y-3 + *(A+1)) + (x+1 - *(R))))) - (*(val + xdim*(y-5 + *(A+2)) + x+3 - *(R+1)))); 
     /********************************************************************************************************************************************/
 
     /********************************************************************************************************************************************/
-    int16_t interpD45 = (-(*(val + xdim*(y+5 - *(B+2)) + x+3 - *(R+1))) + 5*((*(val + xdim*(y+3 - *(B+1)) + (x+1 - *(R))))))>>2;
+    int16_t interpD45 = (-(*(val + xdim*(y+5 - *(B+2)) + x+3 - *(R+1))) + 5*((*(val + xdim*(y+3 - *(B+1)) + (x+1 - *(R))))));
 
-    int16_t interpD225 = (5*((*(val + xdim*(y-1 + *(A)) + (x-3 + *(L+1))))) - (*(val + xdim*(y-3 + *(A+1)) + x-5 + *(L+2))))>>2; 
+    int16_t interpD225 = (5*((*(val + xdim*(y-1 + *(A)) + (x-3 + *(L+1))))) - (*(val + xdim*(y-3 + *(A+1)) + x-5 + *(L+2)))); 
 
-    int16_t interpD135 = (-(*(val + xdim*(y+5 - *(B+2)) + x-5 + *(L+2))) + 5*((*(val + xdim*(y+3 - *(B+1)) + (x-3 + *(L+1))))))>>2;
+    int16_t interpD135 = (-(*(val + xdim*(y+5 - *(B+2)) + x-5 + *(L+2))) + 5*((*(val + xdim*(y+3 - *(B+1)) + (x-3 + *(L+1))))));
 
-    int16_t interpD315 = (5*((*(val + xdim*(y-1 + *(A)) + (x+1 - *(R))))) - (*(val + xdim*(y-3 + *(A+1)) + x+3 - *(R+1))))>>3; 
+    int16_t interpD315 = (5*((*(val + xdim*(y-1 + *(A)) + (x+1 - *(R))))) - (*(val + xdim*(y-3 + *(A+1)) + x+3 - *(R+1)))); 
     /********************************************************************************************************************************************/
 
     /*calculation of error along the diagonals for nearest neighbours*/
@@ -145,17 +145,17 @@ void stage1(uint8_t * val, uint16_t x, uint16_t y, uint16_t xdim, uint16_t ydim)
     if (interpX225 < 0) {interpX225 = 0;}
     if (interpX315 < 0) {interpX315 = 0;}
 
+    double esf45 = e45;
+    double esf135 = e135;
+    double esf225 = e225;
+    double esf315 = e315;
+
     /*calculation of "edge sensitive factor "*/
 
-    uint32_t esf45 = pow((uint32_t)e45, 3);
-    uint32_t esf135 = pow((uint32_t)e135, 3);
-    uint32_t esf225 = pow((uint32_t)e45, 3);
-    uint32_t esf315 = pow((uint32_t)e315, 3);
-
-    double w45 = (esf135 + esf225 + esf315 + 0.001) / 3*(esf135 + esf225 + esf315 + esf45 + 0.002);
-    double w135 = (esf135 + esf225 + esf315 + 0.001) / 3*(esf135 + esf225 + esf315 + esf45 + 0.002);
-    double w225 = (esf135 + esf45 + esf315 + 0.001) / 3*(esf135 + esf225 + esf315 + esf45 + 0.002);
-    double w315 = (esf135 + esf225 + esf45 + 0.001) / 3*(esf135 + esf225 + esf315 + esf45 + 0.002);
+    double w45 = (esf135 + esf225 + esf315 + 0.001) / 3*(esf135 + esf225 + esf315 + esf45 + 0.004);
+    double w135 = (esf135 + esf225 + esf315 + 0.001) / 3*(esf135 + esf225 + esf315 + esf45 + 0.004);
+    double w225 = (esf135 + esf45 + esf315 + 0.001) / 3*(esf135 + esf225 + esf315 + esf45 + 0.004);
+    double w315 = (esf135 + esf225 + esf45 + 0.001) / 3*(esf135 + esf225 + esf315 + esf45 + 0.004);
 
     *(val + y*(xdim) + x) = (uint8_t) round(w45*interpX45 + w135*interpX135 + w225*interpX225 + w315*interpX315);
 
@@ -211,55 +211,55 @@ void stage2(uint8_t * val, uint16_t x, uint16_t y, uint16_t xdim, uint16_t ydim)
 
     /*initial arbitrary interpolation of the missing HR pixel along both diagonals*/
 
-    int16_t interpX180 = ((-*(val + xdim*(y) + x-3 + *(L+1))) + 5*(*(val + xdim*(y) + x-1 + *(L))))>>2;
+    int16_t interpX180 = ((-*(val + xdim*(y) + x-3 + *(L+1))) + 5*(*(val + xdim*(y) + x-1 + *(L))));
 
-    int16_t interpX0 = (5*(*(val + xdim*(y) + x+1 - *(R))) - (*(val + xdim*(y) + x+3 - *(R+1))))>>2; 
+    int16_t interpX0 = (5*(*(val + xdim*(y) + x+1 - *(R))) - (*(val + xdim*(y) + x+3 - *(R+1)))); 
 
-    int16_t interpX270 = (-(*(val + xdim*(y-3 + *(A+1)) + x)) + 5*((*(val + xdim*(y-1 + *(A)) + (x)))))>>2;
+    int16_t interpX270 = (-(*(val + xdim*(y-3 + *(A+1)) + x)) + 5*((*(val + xdim*(y-1 + *(A)) + (x)))));
 
-    int16_t interpX90 = (5*((*(val + xdim*(y+1 - *(B)) + (x)))) - (*(val + xdim*(y+3 - *(B+1)) + x)))>>2; 
+    int16_t interpX90 = (5*((*(val + xdim*(y+1 - *(B)) + (x)))) - (*(val + xdim*(y+3 - *(B+1)) + x))); 
 
 
     /*arbitrary interpolation for four nearest LR neighbours of missing HR pixel*/
 
     /********************************************************************************************************************************************/
-    int16_t interpA180 = (-(*(val + xdim*(y) + x-3 + *(L+1))) + 5*(*(val + xdim*(y) + x-1 + *(L))))>>2;
+    int16_t interpA180 = (-(*(val + xdim*(y) + x-3 + *(L+1))) + 5*(*(val + xdim*(y) + x-1 + *(L))));
 
-    int16_t interpA0 = (5*(*(val + xdim*(y) + (x+3 - *(R+1)))) - (*(val + xdim*(y) + x+5 - *(R+3))))>>2; 
+    int16_t interpA0 = (5*(*(val + xdim*(y) + (x+3 - *(R+1)))) - (*(val + xdim*(y) + x+5 - *(R+3)))); 
 
-    int16_t interpA270 = (-(*(val + xdim*(y-3 + *(A+1)) + x+1 - *(R))) + 5*(*(val + xdim*(y-1 + *(A)) + x+1 - *(R))))>>2;
+    int16_t interpA270 = (-(*(val + xdim*(y-3 + *(A+1)) + x+1 - *(R))) + 5*(*(val + xdim*(y-1 + *(A)) + x+1 - *(R))));
 
-    int16_t interpA90 = (5*(*(val + xdim*(y+1 - *(B)) + x+1 - *(R))) - (*(val + xdim*(y+3 - *(B+1)) + x+1 - *(R))))>>3; 
+    int16_t interpA90 = (5*(*(val + xdim*(y+1 - *(B)) + x+1 - *(R))) - (*(val + xdim*(y+3 - *(B+1)) + x+1 - *(R)))); 
     /********************************************************************************************************************************************/
 
     /********************************************************************************************************************************************/
-    int16_t interpB180 = (-(*(val + xdim*(y-1 + *(A)) + x-3 + *(L+1))) + 5*(*(val + xdim*(y-1 + *(A)) + x-1 + *(L))))>>2;
+    int16_t interpB180 = (-(*(val + xdim*(y-1 + *(A)) + x-3 + *(L+1))) + 5*(*(val + xdim*(y-1 + *(A)) + x-1 + *(L))));
 
-    int16_t interpB0 = (5*(*(val + xdim*(y-1 + *(A)) + (x+1 - *(R)))) - (*(val + xdim*(y-1 + *(A)) + x+3 - *(R+1))))>>2; 
+    int16_t interpB0 = (5*(*(val + xdim*(y-1 + *(A)) + (x+1 - *(R)))) - (*(val + xdim*(y-1 + *(A)) + x+3 - *(R+1)))); 
 
-    int16_t interpB270 = (-(*(val + xdim*(y-5 + *(A+2)) + x)) + 5*(*(val + xdim*(y-3 + *(A+1)) + (x))))>>2; 
+    int16_t interpB270 = (-(*(val + xdim*(y-5 + *(A+2)) + x)) + 5*(*(val + xdim*(y-3 + *(A+1)) + (x)))); 
 
-    int16_t interpB90 = (5*((*(val + xdim*(y+1 - *(B)) + (x)))) - (*(val + xdim*(y+3 - *(B+1)) + x)))>>2; 
+    int16_t interpB90 = (5*((*(val + xdim*(y+1 - *(B)) + (x)))) - (*(val + xdim*(y+3 - *(B+1)) + x))); 
     /********************************************************************************************************************************************/
 
     /********************************************************************************************************************************************/
-    int16_t interpC180 = (-(*(val + xdim*(y) + x-5 + *(L+2))) + 5*(*(val + xdim*(y) + x-3 + *(L+1))))>>2;
+    int16_t interpC180 = (-(*(val + xdim*(y) + x-5 + *(L+2))) + 5*(*(val + xdim*(y) + x-3 + *(L+1))));
 
-    int16_t interpC0 = (5*(*(val + xdim*(y) + x+1 - *(R))) - (*(val + xdim*(y) + x+3 - *(R+1))))>>2; 
+    int16_t interpC0 = (5*(*(val + xdim*(y) + x+1 - *(R))) - (*(val + xdim*(y) + x+3 - *(R+1)))); 
 
-    int16_t interpC270 = (-(*(val + xdim*(y-3 + *(A+1)) + x-1 + *(L))) + 5*(*(val + xdim*(y-1 + *(A)) + x-1 + *(L))))>>2;
+    int16_t interpC270 = (-(*(val + xdim*(y-3 + *(A+1)) + x-1 + *(L))) + 5*(*(val + xdim*(y-1 + *(A)) + x-1 + *(L))));
     
-    int16_t interpC90 = (5*(*(val + xdim*(y+1 - *(B)) + x-1 + *(L))) - (*(val + xdim*(y+3 - *(B+1)) + x-1 + *(L))))>>2; 
+    int16_t interpC90 = (5*(*(val + xdim*(y+1 - *(B)) + x-1 + *(L))) - (*(val + xdim*(y+3 - *(B+1)) + x-1 + *(L)))); 
     /********************************************************************************************************************************************/
 
     /********************************************************************************************************************************************/
-    int16_t interpD180 = (-(*(val + xdim*(y+1 - *(B)) + x-3 + *(L+1))) + 5*(*(val + xdim*(y+1 - *(B)) + x-1 + *(L))))>>2;
+    int16_t interpD180 = (-(*(val + xdim*(y+1 - *(B)) + x-3 + *(L+1))) + 5*(*(val + xdim*(y+1 - *(B)) + x-1 + *(L))));
     
-    int16_t interpD0 = (5*(*(val + xdim*(y+1 - *(B)) + x+1 - *(R))) - (*(val + xdim*(y+1 - *(B)) + x+3 - *(R+1))))>>2; 
+    int16_t interpD0 = (5*(*(val + xdim*(y+1 - *(B)) + x+1 - *(R))) - (*(val + xdim*(y+1 - *(B)) + x+3 - *(R+1)))); 
 
-    int16_t interpD270 = (-(*(val + xdim*(y-3 + *(A+1)) + x-3 + *(L+1))) + 5*(*(val + xdim*(y-1 + *(A)) + x-1 + *(L))))>>2;
+    int16_t interpD270 = (-(*(val + xdim*(y-3 + *(A+1)) + x-3 + *(L+1))) + 5*(*(val + xdim*(y-1 + *(A)) + x-1 + *(L))));
     
-    int16_t interpD90 = (5*(*(val + xdim*(y+3 - *(B+1)) + x+1 - *(R))) - (*(val + xdim*(y+5 - *(B+2)) + x+3 - *(R+1))))>>2; 
+    int16_t interpD90 = (5*(*(val + xdim*(y+3 - *(B+1)) + x+1 - *(R))) - (*(val + xdim*(y+5 - *(B+2)) + x+3 - *(R+1)))); 
     /********************************************************************************************************************************************/
 
     /*calculation of error along the diagonals for nearest neighbours*/
@@ -283,16 +283,16 @@ void stage2(uint8_t * val, uint16_t x, uint16_t y, uint16_t xdim, uint16_t ydim)
     if (interpX180 < 0) {interpX180 = 0;}
     if (interpX270 < 0) {interpX270 = 0;}
 
+    double esf0 = e0;
+    double esf90 = e90;
+    double esf270 = e270;
+    double esf180 = e180;
 
-    uint32_t esf0 = pow(((uint32_t)e0), 3);
-    uint32_t esf90 = pow(((uint32_t)e90), 3);
-    uint32_t esf180 = pow(((uint32_t)e270), 3);
-    uint32_t esf270 = pow(((uint32_t)e180), 3);
 
-    double w0 = (esf90 + esf180 + esf270 + 0.001) / 3*(esf0+esf90+esf180+esf270+0.002);
-    double w90 = (esf0 + esf180 + esf270 + 0.001) / 3*(esf0+esf90+esf180+esf270+0.002);
-    double w180 = (esf90 + esf0 + esf270 + 0.001) / 3*(esf0+esf90+esf180+esf270+0.002);
-    double w270 = (esf90 + esf180 + esf0 + 0.001) / 3*(esf0+esf90+esf180+esf270+0.002);
+    double w0 = (esf90 + esf180 + esf270 + 0.001) / 3*(esf0+esf90+esf180+esf270+0.004);
+    double w90 = (esf0 + esf180 + esf270 + 0.001) / 3*(esf0+esf90+esf180+esf270+0.004);
+    double w180 = (esf90 + esf0 + esf270 + 0.001) / 3*(esf0+esf90+esf180+esf270+0.004);
+    double w270 = (esf90 + esf180 + esf0 + 0.001) / 3*(esf0+esf90+esf180+esf270+0.004);
 
     *(val + xdim*(y) + x) = (uint8_t) round(w0*interpX0 + w90*interpX90 + w180*interpX180 + w270*interpX270);
 
