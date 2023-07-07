@@ -1,7 +1,11 @@
 # VideoScaler
-For intel video scaler project
+This repository is created for intel video scaler project
 
-<img width="1280" alt="GUI2" src="https://github.com/jiaqige0612/VideoScaler/assets/43089087/7417db21-74b1-45f9-9246-4aec7ab45c76">![app](https://github.com/jiaqige0612/VideoScaler/assets/43089087/b2397904-ea57-465b-bf2a-2591eb7e6f4b)
+# Application Preview
+<img width="1280" alt="GUI2" src="https://github.com/jiaqige0612/VideoScaler/assets/43089087/7417db21-74b1-45f9-9246-4aec7ab45c76">
+
+# Flow Chart
+![app](https://github.com/jiaqige0612/VideoScaler/assets/43089087/b2397904-ea57-465b-bf2a-2591eb7e6f4b)
 
 
 
