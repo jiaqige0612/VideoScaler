@@ -1,13 +1,13 @@
-# VideoScaler
-This repository is created for intel video scaler project
+# Pixel Perfect Video Upscaler
+This repository is created for intel video scaler project.
+
+Our design project aims to explore and compare different video upscaling algorithms, with the objective of identifying one that produces satisfactory output quality with acceptable speed, and potentially suitable for implementation on Field-Programmable Gate Arrays (FPGAs) for real-time upscaling. As the designed product of this project, the "Pixel Perfect" video upscaler application software is developed to showcase and apply our research outcomes.
 
 # Application Preview
 <img width="1280" alt="GUI2" src="https://github.com/jiaqige0612/VideoScaler/assets/43089087/7417db21-74b1-45f9-9246-4aec7ab45c76">
 
 # Flow Chart
 ![app](https://github.com/jiaqige0612/VideoScaler/assets/43089087/b2397904-ea57-465b-bf2a-2591eb7e6f4b)
-
-
 
 # Functions and Features
 The edge adaptive video up-scaler is an application software that upscales videos with 5 encapsulated super-resolution algorithm, with varied cost and performance. The 5 algorithms are bicubic interpolation, local structure, DTCWT, Improved NEDI and ESRGAN. The software can support up-scaling of 2x, 4x, 6x and 8x. The supported input and output video formats include MP4, AVI and MOV; supported output image formats include PNG, JPG and BMP.
