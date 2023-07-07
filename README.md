@@ -3,6 +3,24 @@ This repository is created for intel video scaler project.
 
 Our design project aims to explore and compare different video upscaling algorithms, with the objective of identifying one that produces satisfactory output quality with acceptable speed, and potentially suitable for implementation on Field-Programmable Gate Arrays (FPGAs) for real-time upscaling. As the designed product of this project, the "Pixel Perfect" video upscaler application software is developed to showcase and apply our research outcomes.
 
+
+## Documentation
+[Literature Review](https://github.com/jiaqige0612/VideoScaler/blob/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Literature%20Review/Literature_Review.pdf)
+
+[Design Process Outline](https://github.com/jiaqige0612/VideoScaler/blob/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Documentation/Gantt%20Graph.png)
+
+[Meeting and Decision Record](Documentation)
+
+[Implemented Algorithms](Algorithms)
+
+[Graphical User Interface](GUI/mainfinal.py)
+
+[Complete Application Software](https://github.com/jiaqige0612/VideoScaler/tree/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Final%20Application%20Software)
+
+[Test Results](https://github.com/jiaqige0612/VideoScaler/tree/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Test%20Results)
+
+[Complete Design History File](https://github.com/jiaqige0612/VideoScaler/blob/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Documentation/Documentation.pdf)
+
 ## Application Preview
 <img width="1280" alt="GUI2" src="https://github.com/jiaqige0612/VideoScaler/assets/43089087/7417db21-74b1-45f9-9246-4aec7ab45c76">
 
@@ -29,19 +47,3 @@ PSNR measures the ratio between the maximum possible power of a signal (the orig
 
 Other scales such as execution time, as well as estimated number of ALM (Adaptive Logic Module) needed for implementing the algorithms on FPGA are also taken into consideration.
 
-## Documentation
-[Literature Review](https://github.com/jiaqige0612/VideoScaler/blob/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Literature%20Review/Literature_Review.pdf)
-
-[Design Process Outline](https://github.com/jiaqige0612/VideoScaler/blob/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Documentation/Gantt%20Graph.png)
-
-[Meeting and Decision Record](Documentation)
-
-[Implemented Algorithms](Algorithms)
-
-[Graphical User Interface](GUI/mainfinal.py)
-
-[Complete Application Software](https://github.com/jiaqige0612/VideoScaler/tree/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Final%20Application%20Software)
-
-[Test Results](https://github.com/jiaqige0612/VideoScaler/tree/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Test%20Results)
-
-[Complete Design History File](https://github.com/jiaqige0612/VideoScaler/blob/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Documentation/Documentation.pdf)
