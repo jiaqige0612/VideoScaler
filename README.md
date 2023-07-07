@@ -30,9 +30,9 @@ PSNR measures the ratio between the maximum possible power of a signal (the orig
 Other scales such as execution time, as well as estimated number of ALM (Adaptive Logic Module) needed for implementing the algorithms on FPGA are also taken into consideration.
 
 ## Documentation
-[Literature Review](Literature Review/Literature_Review.pdf)
+[Literature Review](https://github.com/jiaqige0612/VideoScaler/blob/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Literature%20Review/Literature_Review.pdf)
 
-[Design Process Outline](Documentation/Gantt Graph.png)
+[Design Process Outline](https://github.com/jiaqige0612/VideoScaler/blob/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Documentation/Gantt%20Graph.png)
 
 [Meeting and Decision Record](Documentation)
 
@@ -40,8 +40,8 @@ Other scales such as execution time, as well as estimated number of ALM (Adaptiv
 
 [Graphical User Interface](GUI/mainfinal.py)
 
-[Complete Application Software](Final Application Software)
+[Complete Application Software](https://github.com/jiaqige0612/VideoScaler/tree/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Final%20Application%20Software)
 
-[Test Results](Test Results)
+[Test Results](https://github.com/jiaqige0612/VideoScaler/tree/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Test%20Results)
 
-[Complete Design History File](Literature Review/Literature_Review.pdf)
+[Complete Design History File](https://github.com/jiaqige0612/VideoScaler/blob/fe14c9c78f00beb09cf45b8afa01cfd411ac443b/Documentation/Documentation.pdf)
