@@ -36,7 +36,7 @@ Other scales such as execution time, as well as estimated number of ALM (Adaptiv
 
 [Meeting and Decision Record](Documentation)
 
-[Algorithms](Algorithms)
+[Implemented Algorithms](Algorithms)
 
 [Graphical User Interface](GUI/mainfinal.py)
 
