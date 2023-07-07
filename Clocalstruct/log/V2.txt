@@ -1,0 +1,16 @@
+src/localStructV2.c: In function 'stage1':
+src/localStructV2.c:77:71: warning: suggest parentheses around '-' inside '>>' [-Wparentheses]
+     int16_t interpX45 = 5*(*(val + xdim*(y+1 - *(B)) + (x+1 - *(R)))) - *(val + xdim*(y+3 - *(B +1)) + x+3 - *(R+1))>>2;
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/localStructV2.c:79:74: warning: suggest parentheses around '-' inside '>>' [-Wparentheses]
+     int16_t interpX135 = 5*((*(val + xdim*(y+1 - *(B)) + (x-1 + *(L))))) - (*(val + xdim*(y+3 - *(B+1)) + x-3 + *(L+1)))>>2;
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/localStructV2.c:81:74: warning: suggest parentheses around '-' inside '>>' [-Wparentheses]
+     int16_t interpX225 = 5*((*(val + xdim*(y-1 - *(B)) + (x-1 + *(L))))) - (*(val + xdim*(y-3 - *(B+1)) + x-3 + *(L+1)))>>2;
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/localStructV2.c:83:72: warning: suggest parentheses around '-' inside '>>' [-Wparentheses]
+     int16_t interpX315 = 5*(*(val + xdim*(y-1 - *(B)) + (x+1 - *(R)))) - *(val + xdim*(-+3 - *(B +1)) + x+3 - *(R+1))>>2;
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/localStructV2.c:136:14: warning: unused variable 'e225' [-Wunused-variable]
+     uint16_t e225 = abs(interpA225-(*(val + xdim*(y+1 - *(B)) + x+1 - *(R)))) + abs(interpB225 - (*(val + xdim*(y-1 + *(A))+ x+1 - *(R)))) +\
+              ^~~~
