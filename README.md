@@ -30,8 +30,18 @@ PSNR measures the ratio between the maximum possible power of a signal (the orig
 Other scales such as execution time, as well as estimated number of ALM (Adaptive Logic Module) needed for implementing the algorithms on FPGA are also taken into consideration.
 
 ## Documentation
-[Literature Review](Literature_Review.pdf)
-[Design Process Outline](Literature_Review.pdf)
-[Meeting and Decision Record](Literature_Review.pdf)
-[Test Results](Literature_Review.pdf)
-[Complete Design History File](Literature_Review.pdf)
+[Literature Review](Literature Review/Literature_Review.pdf)
+
+[Design Process Outline](Documentation/Gantt Graph.png)
+
+[Meeting and Decision Record](Documentation)
+
+[Algorithms](Algorithms)
+
+[Graphical User Interface](GUI/mainfinal.py)
+
+[Complete Application Software](Final Application Software)
+
+[Test Results](Test Results)
+
+[Complete Design History File](Literature Review/Literature_Review.pdf)
