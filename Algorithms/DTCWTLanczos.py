@@ -5,29 +5,16 @@ import matplotlib.pyplot as plt
 
 from PIL import Image
 
-#open-source library for wavelet transform https://github.com/PyWavelets/pywt
-import pywt
-import pywt.data
 
 import dtcwt
 import dtcwt.compat
 import dtcwt.sampling
-#modified using code from https://github.com/rjw57/dtcwt
+#using open-source library dtcwt for wavelet transform: https://github.com/rjw57/dtcwt
 import dtcwt
 import dtcwt.compat
 import dtcwt.sampling
 
-# Use an off-screen backend for matplotlib
-# import matplotlib
-# matplotlib.use('agg')
-
-# Import numpy and matplotlib's pyplot interface
 import numpy as np
-#from matplotlib.pyplot import *
-
-# Get a copy of the famous 'mandrill' image. In the default dtcwt tree, we ship
-# one with the tests. The mandrill image is 512x512, floating point and has pixel
-# values on the interval (0, 1].
 
 def scale_waveletlanczos(ds_frame, scale = 2):
 
