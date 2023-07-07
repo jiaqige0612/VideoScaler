@@ -42,9 +42,8 @@ directorysave = r'D:\GUI'
 filenamesave = 'savedImage.png'
 
 sg.theme('LightGrey1')
-# sg. theme_background_color('#DCDCDC')
 font = ("Helvetica Bold", 12)
-# sg. theme_input_background_color('#DCDCDC')
+
 
 file_list_column = [
     [
@@ -59,8 +58,6 @@ file_list_column = [
         sg.Text("Choose a video from file list: "),
         sg.Text(size=(40, 1), key="-TOUT-")
     ],
-    #[sg.Text("Choose a video from file list")],
-    #[sg.Text(size=(40, 1), key="-TOUT-")],
     [
         sg.Text("Original Video Frame Preview", font=font)
     ],
@@ -82,7 +79,7 @@ file_list_column = [
         #     size=(40, 15),
         #     key="-FRAME SLIDER-",
         # ),
-        sg.InputText(key="-FRAME SLIDER-"),
+        sg.InputText(key="-FRAME SLIDER-", default_text=0),
         sg.Button("Produce Super-resolved Frame", bind_return_key=True, visible=True)
     ],
     [
@@ -95,7 +92,7 @@ file_list_column = [
         #     size=(40, 15),
         #     key="-FRAME SLIDER-",
         # ),
-        sg.InputText(key="-END FRAME SLIDER-"),
+        sg.InputText(key="-END FRAME SLIDER-", default_text=100),
         sg.Button("Produce Super-resolved Video", bind_return_key=False, visible=True)
     ],
     [sg.Text('Choose Super-resolution Mode'),
@@ -210,11 +207,8 @@ while True:
 
         scale = int(values["-RATIO SLIDER-"])
         sg.popup("Processing, Please Wait (Press OK to proceed)")
-        if values["-MODE SLIDER-"] == 'Bicubic':
-            #bicubic
-            frame = cv2.resize(frame0, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
-            #frame = bicubic_interpolation(frame0, scale=int(values["-RATIO SLIDER-"]))
-        elif values["-MODE SLIDER-"] == 'Structure Adaptation':
+
+        if values["-MODE SLIDER-"] == 'Structure Adaptation':
             frame = LocalStruct(frame0, scale)
         elif values["-MODE SLIDER-"] == 'Wavelet':
             frame = scale_waveletlanczos(frame0, scale=scale)
@@ -228,6 +222,10 @@ while True:
             sg.popup("Processing, ratio limited to 4 for SRGAN")
             temp_frame = output_frame(frame0)
             frame = cv2.cvtColor(cv2.imread(r"D:\GUI\sr_frame_path\f.png"), cv2.COLOR_RGB2BGR)
+        else:
+            # bicubic
+            frame = cv2.resize(frame0, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
+            # frame = bicubic_interpolation(frame0, scale=int(values["-RATIO SLIDER-"]))
 
 
 
@@ -261,8 +259,8 @@ while True:
         frameSize = (frame0.shape[1]*int(values["-RATIO SLIDER-"]), frame0.shape[0]*int(values["-RATIO SLIDER-"]))
         scale = int(values["-RATIO SLIDER-"])
 
-        image_folder = r'D:\GUI'
-        video_name = 'video.avi'
+        image_folder = r'D:\GUI\frame_directory'
+        video_name = 'savedVideo.avi'
 
         video_path = video_name
         #image_path = 'savedImage.bmp'
@@ -279,11 +277,11 @@ while True:
         # image_folder = r'C:\Users\jiaqi\PycharmProjects\pythonProject'
         sg.popup("Processing Video, Please Wait. (Press OK to Proceed)")
         if values["-MODE SLIDER-"] == 'ESRGAN':
-            output_video(video_path=os.path.join(image_folder, video_path), startframeindex=0, endframeindex=100)
+            output_video(video_path=filename, startframeindex=int(values["-FRAME SLIDER-"]), endframeindex=int(values["-END FRAME SLIDER-"]), output_path=video_path, format=values["-Video Format-"] )
             #SRGAN need to run on Google colab
             #Can run locally but not ideal
         else:
-            for frame_index in range(int(values["-FRAME SLIDER-"]), int(values["-END FRAME SLIDER-"])):
+            for frame_index in range(int(values["-FRAME SLIDER-"]), int(values["-END FRAME SLIDER-"])+1):
                 video.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
                 ret0, frame0 = video.read()
 
@@ -294,11 +292,7 @@ while True:
 
                 st = time.time()
 
-                if values["-MODE SLIDER-"] == 'Bicubic':
-                    # bicubic
-                    frame = cv2.resize(frame0, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
-                    # frame = bicubic_interpolation(frame0, scale=int(values["-RATIO SLIDER-"]))
-                elif values["-MODE SLIDER-"] == 'Structure Adaptation':
+                if values["-MODE SLIDER-"] == 'Structure Adaptation':
                     frame = LocalStruct(frame0, scale)
                 elif values["-MODE SLIDER-"] == 'Wavelet':
                     frame = scale_waveletlanczos(frame0, scale=scale)
@@ -308,6 +302,10 @@ while True:
                     eng.NEDI_cannybicubic_python(scale)
                     eng.quit()
                     frame = cv2.imread("NEDIcannybicubic.png")
+                else:
+                    # bicubic
+                    frame = cv2.resize(frame0, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
+                    # frame = bicubic_interpolation(frame0, scale=int(values["-RATIO SLIDER-"]))
 
 
                 et = time.time()
@@ -316,7 +314,8 @@ while True:
 
                 print(np.shape(frame))
 
-                cv2.imwrite(str(frame_index)+".png", frame)
+                current_name = str(frame_index)+".png"
+                cv2.imwrite(os.path.join(image_folder, current_name), frame)
 
                 #out.write(frame)
 
@@ -338,7 +337,7 @@ while True:
                 out_video = cv2.VideoWriter(video_path, cv2.VideoWriter_fourcc('I','4','2','0'), fps, (width, height))
 
 
-            for frame_index in range(int(values["-FRAME SLIDER-"]), int(values["-END FRAME SLIDER-"])):
+            for frame_index in range(int(values["-FRAME SLIDER-"]), int(values["-END FRAME SLIDER-"])+1):
                 print(str(frame_index)+".png")
                 out_video.write(cv2.imread(os.path.join(image_folder, str(frame_index)+".png")))
                 os.remove(os.path.join(image_folder, str(frame_index)+".png"))
